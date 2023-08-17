@@ -198,67 +198,68 @@ body {
 
   /* Specific CSS for createNew to-do list Screen */
 
-    .create-todo-list-page {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+  .create-todo-list-page {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
   }
 
   .create-todo-list-container {
-      width: 100%;
-      max-width: 400px;
-      background-color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
   }
 
   .create-todo-list-header {
-      text-align: center;
-      color: #333;
+    text-align: center;
+    color: #333;
   }
 
   .create-todo-list-label {
-      display: block;
-      margin-bottom: 10px;
-      color: #566198;
-      font-weight: bold;
-      font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+    color: #566198;
+    font-weight: bold;
+    font-size: 16px;
   }
 
   .create-todo-list-input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      margin-bottom: 15px;
-      transition: border-color 0.3s ease;
-      font-size: 16px;
+    width: 100%; /* Make input fields full width */
+    max-width: 300px; /* Set a maximum width for the input fields */
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease;
+    font-size: 16px;
   }
 
   .create-todo-list-input:focus {
-      border-color: #566198;
+    border-color: #566198;
   }
 
   .create-todo-list-submit {
-      width: 100%;
-      padding: 10px;
-      background-color: #4CAF50;
-      border: none;
-      color: #ffffff;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    border: none;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
   }
 
   .create-todo-list-submit:hover {
-      background-color: #45a049;
+    background-color: #45a049;
   }
 
    /* ----------------------------------------------------------------------------------------- */
@@ -313,3 +314,5 @@ body {
       padding: 10px;
     }
   }
+
+   /* ----------------------------------------------------------------------------------------- */

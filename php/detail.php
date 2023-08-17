@@ -22,19 +22,5 @@
     <p>Color: Blue</p>
   </div>
 
-  <div class="detail-item-info">
-    <h2>Item Title</h2>
-    <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    <p>Price: $24.99</p>
-    <p>Color: Red</p>
-  </div>
-
-  <div class="detail-item-info">
-    <h2>Item Title</h2>
-    <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    <p>Price: $29.99</p>
-    <p>Color: Green</p>
-  </div>
-
 </body>
 </html>
