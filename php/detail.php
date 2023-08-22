@@ -8,7 +8,7 @@
   <title>Detailed Page</title>
 </head>
 <body class="detail-page">
-<?php include '../components/navbar.php'; ?>
+<?php include '../classes/navbar.php'; ?>
 
   <div class="detail-list-name">
     <h1>Detailed Page</h1>

@@ -1,3 +1,14 @@
+<?php
+include_once("../classes/functions.php");
+
+$login = new User();
+
+if (!$login->isLoggedIn()) {
+    header("Location: ../login.php"); // Redirect to login if not logged in
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +19,7 @@
   <title>Home Page</title>
 </head>
 <body>
-  <?php include '../components/navbar.php'; ?>
+<?php include '../classes/navbar.php'; ?>
 
   <div class="container">
     <h1>Ahoy, Sailor! Find your tasks down here!</h1>
