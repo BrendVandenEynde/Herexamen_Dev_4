@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
-    <title>To-Do List</title>
+    <title>Create New Task</title>
 </head>
 <body class="create-todo-list-page">
-<?php include '../classes/navbar.php'; ?>
+    <?php include '../classes/navbar.php'; ?>
 
     <div class="create-todo-list-container">
-        <h1 class="create-todo-list-header">Create New To-Do List</h1>
-        <form method="POST" action="addTask.php">
-            <label class="create-todo-list-label" for="task1">Name:</label>
-            <input class="create-todo-list-input" type="text" id="task1" name="task1" placeholder="Name the list">
-            
-            <label class="create-todo-list-label" for="task2">Description:</label>
-            <input class="create-todo-list-input" type="text" id="task2" name="task2" placeholder="What needs to be done?">
-            
-            <input class="create-todo-list-submit" type="submit" value="Create List">
+        <h1 class="create-todo-list-header">Create New Task</h1>
+        <form method="post" action="addTask.php">
+            <label class="create-todo-list-label" for="name">Name:</label>
+            <input class="create-todo-list-input" type="text" id="name" name="name" required><br><br>
+            <label class="create-todo-list-label" for="description">Description:</label>
+            <textarea class="create-todo-list-input" id="description" name="description" required></textarea><br><br>
+            <label class="create-todo-list-label" for="deadline">Deadline:</label>
+            <input class="create-todo-list-input" type="date" id="deadline" name="deadline" required><br><br>
+            <input class="create-todo-list-submit" type="submit" value="Create Task">
         </form>
     </div>
 </body>
