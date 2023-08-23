@@ -20,6 +20,20 @@ $taskStmt = $db->prepare($taskQuery);
 $taskStmt->bindParam(':task_id', $taskID);
 $taskStmt->execute();
 $task = $taskStmt->fetch(PDO::FETCH_ASSOC);
+
+// Handle delete task
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
+    $deleteQuery = "DELETE FROM list WHERE id = :task_id";
+    $deleteStmt = $db->prepare($deleteQuery);
+    $deleteStmt->bindParam(':task_id', $taskID);
+
+    if ($deleteStmt->execute()) {
+        echo "<script>alert('Task deleted successfully.'); window.location.href = 'homePage.php';</script>";
+        exit();
+    } else {
+        echo "<script>alert('An error occurred while deleting the task.');</script>";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +55,18 @@ $task = $taskStmt->fetch(PDO::FETCH_ASSOC);
   <div class="detail-item-info">
     <p>Description: <?= $task['description']; ?></p>
     <p>Deadline: <?= $task['deadline']; ?></p>
+  </div>
+
+  <div class="buttons">
+     <!-- Complete Task Button -->
+     <form method="post">
+        <button type="submit" name="complete">Complete Task</button>
+    </form>
+
+    <!-- Delete Task Button -->
+    <form method="post">
+        <button type="submit" name="delete">Delete Task</button>
+    </form>
   </div>
 
 </body>
