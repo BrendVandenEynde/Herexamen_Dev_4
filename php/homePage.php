@@ -1,5 +1,6 @@
 <?php
-include_once("../classes/functions.php");
+include_once("../classes/User.php"); // Adjusted path
+include_once("../classes/Db.php"); 
 
 $login = new User();
 

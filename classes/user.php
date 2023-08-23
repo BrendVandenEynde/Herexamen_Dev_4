@@ -55,17 +55,17 @@ class User {
             $this->error = "Please enter both email and password.";
             return;
         }
-
+    
         // Perform database check
-        $query = "SELECT id, hashed_password FROM users WHERE email = :email";
+        $query = "SELECT id, password FROM user WHERE email = :email"; // Use correct table name 'user'
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':email', $this->email);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user && password_verify($this->password, $user['hashed_password'])) {
+    
+        if ($user && password_verify($this->password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
-            header("Location: ../Herexamen_Dev_4-main/pages/homePage.php"); // Redirect to dashboard on successful login
+            header("Location: ../pages/homePage.php"); // Redirect to dashboard on successful login
             exit();
         } else {
             $this->error = "Invalid email or password.";
@@ -78,7 +78,8 @@ class User {
 
     public function logout() {
         session_destroy();
-        header("Location: ./Index.php");
+        header("Location: ../Index.php"); // Corrected path
         exit();
     }
 }
+?>

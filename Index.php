@@ -4,14 +4,14 @@ include_once("../Herexamen_Dev_4-main/classes/User.php");
 
 $login = new User(); // Instantiate the User class
 
-$error = '';
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Handle login logic
+    $login->setEmail($_POST["email"]);
+    $login->setPassword($_POST["password"]);
+    $login->doLogin(); // Handle login logic
 }
 
 if ($login->isLoggedIn()) {
-    header("Location: ../Herexamen_Dev_4-main/pages/homePage.php");
+    header("Location: ../Herexamen_Dev_4-main/php/homePage.php"); // Adjusted path
     exit();
 }
 ?>
@@ -21,16 +21,16 @@ if ($login->isLoggedIn()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="./images/DefFaviconPortPixel.svg">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="icon" type="image/svg+xml" href="../images/DefFaviconPortPixel.svg"> <!-- Adjusted path -->
+    <link rel="stylesheet" href="./css/style.css"> <!-- Adjusted path -->
     <title>Login</title>
 </head>
 <body class="login-body">
   <h1 class="login-header">Port Pixel To-Do List</h1>
   <div class="login-container">
     <h2>Avast, Matey! Secure Your Voyage:<br>Log In to Set Sail!</h2>
-    <form method="POST" action="login.php">
-      <?php if ($error) : ?>
+    <form method="POST" action="">
+      <?php if ($error = $login->getError()) : ?> <!-- Display error from the User class -->
         <p class="login-error"><?php echo $error; ?></p>
       <?php endif; ?>
       <div class="login-form-group">
@@ -45,7 +45,7 @@ if ($login->isLoggedIn()) {
         <input class="login-submit" type="submit" value="Log in">
       </div>
     </form>
-    <p class="register-link">Don't have an account? <a href="./php/register.php">Register here</a></p>
+    <p class="register-link">Don't have an account? <a href="../php/register.php">Register here</a></p> <!-- Adjusted path -->
   </div>
 </body>
 </html>
