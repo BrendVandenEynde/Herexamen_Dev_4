@@ -1,6 +1,7 @@
   /* Specific CSS for Login Screen */
 
-  .login-body {
+  .login-body,
+  .register-body {
     font-family: Arial, sans-serif;
     height: 100vh;
     margin: 0;
@@ -9,9 +10,11 @@
     background-repeat: no-repeat;
     animation: backgroundAnimation 10s infinite linear alternate;
     overflow: hidden;
-    color:#364045;
+    color: #364045;
   }
-  .login-header {
+  
+  .login-header,
+  .register-header {
     position: fixed;
     top: 0;
     left: 50%;
@@ -23,7 +26,8 @@
     font-size: 32px;
   }
   
-  .login-container {
+  .login-container,
+  .register-container {
     max-width: 400px;
     margin: 120px auto 0;
     padding: 50px;
@@ -33,29 +37,36 @@
     border-radius: 20px;
   }
   
-  .login-container h2 {
+  .login-container h2,
+  .register-container h2 {
     text-align: center;
     font-size: 28px;
   }
   
-  .login-form-group {
+  .login-form-group,
+  .register-form-group {
     margin-bottom: 15px;
   }
   
-  .login-label {
+  .login-label,
+  .register-label {
     display: block;
     margin-bottom: 5px;
   }
   
   .login-input[type="text"],
-  .login-input[type="password"] {
+  .login-input[type="password"],
+  .register-input[type="text"],
+  .register-input[type="password"],
+  .register-input[type="email"] {
     width: 95%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
   
-  .login-submit {
+  .login-submit,
+  .register-submit {
     width: 100%;
     padding: 10px;
     background-color: #566198;
@@ -66,10 +77,22 @@
     border-radius: 4px;
   }
   
-  .login-submit:hover {
+  .login-submit:hover,
+  .register-submit:hover {
     background-color: #566198b2;
   }
   
+  .register-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+  }
+
+  p{
+    text-align: center;
+  }
+  
+  /* Animation */
   @keyframes backgroundAnimation {
     0% {
       background-position: 100% 100%;
