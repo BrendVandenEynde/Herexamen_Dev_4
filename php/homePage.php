@@ -54,8 +54,9 @@ $completedTasks = $completedStmt->fetchAll(PDO::FETCH_ASSOC);
     <ul class="item-list">
         <?php foreach ($incompleteTasks as $task) : ?>
             <li class="item-card">
-                <h3><?= $task['name']; ?></h3>
+                <h3 class="task-name"><?= $task['name']; ?></h3>
                 <p>Deadline: <?= $task['deadline']; ?></p>
+                <button class="view-task-button">View Task </button>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -64,8 +65,9 @@ $completedTasks = $completedStmt->fetchAll(PDO::FETCH_ASSOC);
     <ul class="item-list">
         <?php foreach ($completedTasks as $task) : ?>
             <li class="item-card">
-                <h3><?= $task['name']; ?></h3>
+                <h3 class="task-name"><?= $task['name']; ?></h3>
                 <p>Deadline: <?= $task['deadline']; ?></p>
+                <button class="view-task-button">View Task</button>
             </li>
         <?php endforeach; ?>
     </ul>
