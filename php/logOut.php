@@ -1,8 +1,14 @@
-<?php 
+<?php
 
-if (session_status() === PHP_SESSION_ACTIVE) {
-  session_destroy();
-}
+session_start(); // Start the session if it's not already started
 
-header('Location: ../php/login.php');
+// Unset all session variables
+$_SESSION = array();
+
+// Destroy the session
+session_destroy();
+
+// Redirect to Index.php after logout
+header('Location: ../Index.php');
 exit();
+?>
