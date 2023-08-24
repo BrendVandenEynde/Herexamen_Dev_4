@@ -34,6 +34,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
         echo "<script>alert('An error occurred while deleting the task.');</script>";
     }
 }
+
+// Check if the task is completed
+$taskCompleted = $task['completed'] == 1;
+
+// Handle complete task
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['complete']) && !$taskCompleted) {
+  $completeQuery = "UPDATE list SET incomplete = 0, completed = 1 WHERE id = :task_id";
+  $completeStmt = $db->prepare($completeQuery);
+  $completeStmt->bindParam(':task_id', $taskID);
+
+  if ($completeStmt->execute()) {
+      echo "<script>alert('Task completed successfully.'); window.location.href = 'homePage.php';</script>";
+      exit();
+  } else {
+      echo "<script>alert('An error occurred while completing the task.');</script>";
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -58,16 +76,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
   </div>
 
   <div class="buttons">
-     <!-- Complete Task Button -->
-     <form method="post">
-        <button type="submit" name="complete">Complete Task</button>
-    </form>
+    <!-- Complete Task Button -->
+    <?php if (!$taskCompleted): ?>
+        <form method="post">
+            <button type="submit" name="complete">Complete Task</button>
+        </form>
+    <?php endif; ?>
 
     <!-- Delete Task Button -->
     <form method="post">
         <button type="submit" name="delete">Delete Task</button>
     </form>
-  </div>
+</div>
 
 </body>
 </html>

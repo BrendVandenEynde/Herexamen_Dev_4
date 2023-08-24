@@ -45,7 +45,7 @@ if ($login->isLoggedIn()) {
         <input class="login-submit" type="submit" value="Log in">
       </div>
     </form>
-    <p class="register-link">Don't have an account? <a href="../php/register.php">Register here</a></p> <!-- Adjusted path -->
+    <p class="register-link">Don't have an account? <a href="./php/register.php">Register here</a></p> <!-- Adjusted path -->
   </div>
 </body>
 </html>
