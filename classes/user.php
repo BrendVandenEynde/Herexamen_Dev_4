@@ -65,7 +65,7 @@ class User {
     
         if ($user && password_verify($this->password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
-            header("Location: ./pages/homePage.php"); // Redirect to dashboard on successful login
+            header("Location: ./php/homePage.php"); // Redirect to dashboard on successful login
             exit();
         } else {
             $this->error = "Invalid email or password.";

@@ -1,6 +1,6 @@
 <?php
-include_once("../Herexamen_Dev_4-main/classes/Db.php");
-include_once("../Herexamen_Dev_4-main/classes/User.php");
+include_once("./classes/user.php");
+include_once("./classes/Db.php");
 
 $login = new User(); // Instantiate the User class
 
@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 if ($login->isLoggedIn()) {
-    header("Location: ../Herexamen_Dev_4-main/php/homePage.php"); // Adjusted path
+    header("Location: ../Herexamen_Dev_4/php/homePage.php"); // Adjusted path
     exit();
 }
 ?>
