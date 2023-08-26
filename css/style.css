@@ -246,7 +246,7 @@ body {
 
 
 
-  /* Specific CSS for createNew to-do list Screen */
+  /* Specific CSS for createNewTask  Screen */
 
   .create-todo-list-page {
     font-family: Arial, sans-serif;
@@ -317,7 +317,7 @@ body {
 
 
 
-/* Specific CSS for detail Screen */
+/* Specific CSS for taskDetail Screen */
 
    .detail-page {
     font-family: Arial, sans-serif;
@@ -394,5 +394,98 @@ body {
     background-color: red;
     color: white;
   }
+
+   /* ----------------------------------------------------------------------------------------- */
+
+
+
+/* Specific CSS for listDetail Screen */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f2f2f2;
+  color: #364045;
+}
+
+h1,
+#list-detail-title {
+  font-size: 32px;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+
+#task-list {
+  list-style: none; /* Remove default list item marker */
+  padding-bottom: 2%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-gap: 20px;
+}
+
+#task-item {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#task-item:hover {
+  transform: translateY(-5px);
+}
+
+.task-name {
+  margin-top: 0;
+  color: #333;
+  font-size: 20px;
+  text-align: center;
+}
+
+.task-description {
+  margin: 10px 0;
+  color: #666;
+}
+
+.view-task-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.no-tasks-message {
+  color: #f00;
+  text-align: center;
+  font-size: 18px;
+  margin-top: 20px;
+} 
+
+.delete-list-button {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+.delete-list-button:hover {
+  background-color: darkred;
+}
+
+.center-text {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+}
+
 
    /* ----------------------------------------------------------------------------------------- */

@@ -1,18 +1,22 @@
 <?php
-include_once("../classes/User.php");
-include_once("../classes/Db.php");
+include_once("../inc/bootstrap.php");
 
+// Create a new User instance to manage login
 $login = new User();
 
+// Redirect to login page if not logged in
 if (!$login->isLoggedIn()) {
-    header("Location: ../login.php"); // Redirect to login if not logged in
+    header("Location: ../login.php");
     exit();
 }
 
+// Get a database instance
 $db = Db::getInstance();
+
+// Get the user's ID from the session
 $userID = $_SESSION['user_id'];
 
-// Retrieve the username from the database based on the user's ID
+// Query to retrieve the username based on the user's ID
 $usernameQuery = "SELECT username FROM user WHERE id = :user_id";
 $usernameStmt = $db->prepare($usernameQuery);
 $usernameStmt->bindParam(':user_id', $userID);
@@ -21,14 +25,14 @@ $usernameResult = $usernameStmt->fetch(PDO::FETCH_ASSOC);
 $username = $usernameResult['username'];
 
 // Query for incomplete tasks
-$incompleteQuery = "SELECT * FROM list WHERE created_by = :user_id AND incomplete = 1 ORDER BY deadline ASC";
+$incompleteQuery = "SELECT * FROM lists WHERE created_by = :user_id ";
 $incompleteStmt = $db->prepare($incompleteQuery);
 $incompleteStmt->bindParam(':user_id', $userID);
 $incompleteStmt->execute();
 $incompleteTasks = $incompleteStmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Query for completed tasks
-$completedQuery = "SELECT * FROM list WHERE created_by = :user_id AND completed = 1 ORDER BY deadline DESC";
+$completedQuery = "SELECT * FROM lists WHERE created_by = :user_id";
 $completedStmt = $db->prepare($completedQuery);
 $completedStmt->bindParam(':user_id', $userID);
 $completedStmt->execute();
@@ -38,43 +42,49 @@ $completedTasks = $completedStmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/svg+xml" href="../images/DefFaviconPortPixel.svg">
-  <link rel="stylesheet" href="../css/style.css">
-  <title>Home Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../images/DefFaviconPortPixel.svg">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Home Page</title>
 </head>
 <body>
-<?php include '../classes/navbar.php'; ?>
+<?php include '../inc/nav.inc.php'; ?>
 
 <div class="container">
-    <h1>Ahoy, <?= $username; ?>! Find your tasks down here!</h1>
+    <h1>Ahoy, <?= $username; ?>! Find your to-do lists down here!</h1>
 
-    <h2>Incomplete Tasks</h2>
-    <ul class="item-list">
-        <?php foreach ($incompleteTasks as $task) : ?>
-            <li class="item-card">
-                <h3 class="task-name"><?= $task['name']; ?></h3>
-                <p>Deadline: <?= $task['deadline']; ?></p>
-                <a href="../php/detail.php?id=<?= $task['id']; ?>" class="item-link">
-                    <button class="view-task-button">View Task</button>
-                </a>
-            </li>
-        <?php endforeach; ?>
-    </ul>
+    <!-- User's Lists Section -->
+    <?php
+    $userLists = []; // Initialize an empty array
 
-    <h2>Completed Tasks</h2>
-    <ul class="item-list">
-        <?php foreach ($completedTasks as $task) : ?>
-            <li class="item-card">
-                <h3 class="task-name"><?= $task['name']; ?></h3>
-                <p>Deadline: <?= $task['deadline']; ?></p>
-                <a href="../php/detail.php?id=<?= $task['id']; ?>" class="item-link">
-                    <button class="view-task-button">View Task</button>
-                </a>
-            </li>
-        <?php endforeach; ?>
-    </ul>
+    // Query to retrieve user's lists
+    $userListsQuery = "SELECT * FROM lists WHERE created_by = :user_id";
+    $userListsStmt = $db->prepare($userListsQuery);
+    $userListsStmt->bindParam(':user_id', $userID);
+    $userListsStmt->execute();
+    $userLists = $userListsStmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    if (count($userLists) > 0) :
+    ?>
+        <h2>Your Lists</h2>
+        <ul class="item-list">
+            <?php foreach ($userLists as $list) : ?>
+                <li class="item-card">
+                    <h3 class="list-name"><?= $list['name']; ?></h3>
+                    <?php if (!empty($list['description'])) : ?>
+                        <p><?= $list['description']; ?></p>
+                    <?php endif; ?>
+                    <a href="../php/listDetail.php?id=<?= $list['id']; ?>" class="item-link">
+                        <button class="view-list-button">View List</button>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else : ?>
+        <p class="no-lists-message">Arrr, there be no lists here. seems like we have nothing to do.</p>
+    <?php endif; ?>
 </div>
 </body>
 </html>
+

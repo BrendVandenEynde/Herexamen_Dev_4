@@ -1,7 +1,5 @@
 <?php
-include_once("../classes/User.php");
-include_once("../classes/Db.php");
-
+include_once("../inc/bootstrap.php");
 $login = new User();
 
 if (!$login->isLoggedIn()) {
@@ -11,21 +9,27 @@ if (!$login->isLoggedIn()) {
 
 $db = Db::getInstance();
 
+// Retrieve user's lists
+$userId = $_SESSION['user_id'];
+$listsQuery = "SELECT * FROM lists WHERE created_by = :userId";
+$listsStmt = $db->prepare($listsQuery);
+$listsStmt->bindParam(":userId", $userId);
+$listsStmt->execute();
+$lists = $listsStmt->fetchAll(PDO::FETCH_ASSOC);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $listId = $_POST["list"];
     $name = $_POST["name"];
     $description = $_POST["description"];
     $deadline = $_POST["deadline"];
-    $userId = $_SESSION['user_id'];
 
-    $query = "INSERT INTO list (name, description, deadline, created_by) VALUES (:name, :description, :deadline, :userId)";
+    $query = "INSERT INTO tasks (name, description, deadline, list_id, created_by) VALUES (:name, :description, :deadline, :listId, :userId)";
     
-    // Debugging: Echo the query for verification
-    echo "Query: $query";
-
     $stmt = $db->prepare($query);
     $stmt->bindParam(":name", $name);
     $stmt->bindParam(":description", $description);
     $stmt->bindParam(":deadline", $deadline);
+    $stmt->bindParam(":listId", $listId);
     $stmt->bindParam(":userId", $userId);
 
     if ($stmt->execute()) {
@@ -37,5 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 header("Location: ../php/homePage.php");
 exit();
-?>
 
+
+?>

@@ -9,6 +9,6 @@ $_SESSION = array();
 session_destroy();
 
 // Redirect to Index.php after logout
-header('Location: ../Index.php');
+header('Location: ../index.php');
 exit();
 ?>

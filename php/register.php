@@ -1,6 +1,5 @@
 <?php
-include_once("../classes/Db.php");
-include_once("../classes/User.php");
+include_once("../inc/bootstrap.php");
 
 $error = '';
 
@@ -60,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       </div>
       <div class="register-form-group">
         <input class="register-submit" type="submit" value="Register">
-        <p>Already have an account? <a href="../Index.php">Log in here</a></p> <!-- Link to go back to the login page -->
+        <p>Already have an account? <a href="../index.php">Log in here</a></p> <!-- Link to go back to the login page -->
       </div>
     </form>
   </div>
