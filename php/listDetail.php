@@ -104,13 +104,18 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <p class="no-tasks-message" id="no-tasks-message">Arrr, what's this? There be no tasks on this list, it's empty! We have been taken fools mateys!</p>
         <?php endif; ?>
         <div class="center-text">
-            <form method="post">
-                <button type="submit" name="delete-list" class="delete-list-button">Delete List</button>
-            </form>
-        </div>
-    <?php else : ?>
-        <p class="error-message" id="error-message">Oops! we didn't seem to get the list of ye.</p>
-    <?php endif; ?>
+        <form method="post">
+            <button type="submit" name="delete-list" class="delete-list-button">Delete List</button>
+        </form>
+
+        <!-- Temporary Create Task Button -->
+        <a href="../php/createNewTask.php?list_id=<?= $listID; ?>" class="create-task-link">
+            <button class="create-task-button">Create Task</button>
+        </a>
+    </div>
+<?php else : ?>
+    <p class="error-message" id="error-message">Oops! we didn't seem to get the list of ye.</p>
+<?php endif; ?>
 </div>
 </body>
 </html>
