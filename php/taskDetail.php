@@ -14,7 +14,12 @@ if (!$login->isLoggedIn()) {
 $db = Db::getInstance();
 
 // Get the task ID from the URL parameter
-$taskID = $_GET['id'];
+$taskID = isset($_GET['id']) ? $_GET['id'] : null;
+
+if ($taskID === null) {
+    // Redirect or display an error message because task ID is not provided
+    exit();
+}
 
 // Query for the task details based on the task ID
 $taskQuery = "SELECT * FROM tasks WHERE id = :task_id"; // Use "tasks" table here
@@ -25,7 +30,7 @@ $task = $taskStmt->fetch(PDO::FETCH_ASSOC);
 
 // Handle delete task
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
-    $deleteQuery = "DELETE FROM lists WHERE id = :task_id";
+    $deleteQuery = "DELETE FROM tasks WHERE id = :task_id"; // Change "lists" to "tasks"
     $deleteStmt = $db->prepare($deleteQuery);
     $deleteStmt->bindParam(':task_id', $taskID);
 
@@ -42,7 +47,7 @@ $taskCompleted = $task['completed'] == 1;
 
 // Handle complete task
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['complete']) && !$taskCompleted) {
-    $completeQuery = "UPDATE lists SET incomplete = 0, completed = 1 WHERE id = :task_id";
+    $completeQuery = "UPDATE tasks SET completed = 1 WHERE id = :task_id"; // Change "lists" to "tasks"
     $completeStmt = $db->prepare($completeQuery);
     $completeStmt->bindParam(':task_id', $taskID);
     

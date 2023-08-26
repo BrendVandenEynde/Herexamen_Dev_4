@@ -67,7 +67,7 @@ $completedTasks = $completedStmt->fetchAll(PDO::FETCH_ASSOC);
     
     if (count($userLists) > 0) :
     ?>
-        <h2>Your Lists</h2>
+<h2>Your Lists</h2>
         <ul class="item-list">
             <?php foreach ($userLists as $list) : ?>
                 <li class="item-card">
@@ -75,9 +75,11 @@ $completedTasks = $completedStmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php if (!empty($list['description'])) : ?>
                         <p><?= $list['description']; ?></p>
                     <?php endif; ?>
-                    <a href="../php/listDetail.php?id=<?= $list['id']; ?>" class="item-link">
-                        <button class="view-list-button">View List</button>
-                    </a>
+                    <div class="center-text">
+                        <a href="../php/listDetail.php?id=<?= $list['id']; ?>" class="item-link">
+                            <button class="view-list-button">View List</button>
+                        </a>
+                    </div>
                 </li>
             <?php endforeach; ?>
         </ul>
