@@ -8,12 +8,12 @@ class User {
         $this->db = Db::getInstance(); // Get a database instance
     }
 
-    // Set user's email, ensure no XSS vulnerabilities
+    // Set user's email
     public function setEmail($email) {
         $this->email = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
     }
 
-    // Set user's password, no need for XSS protection on passwords
+    // Set user's password
     public function setPassword($password) {
         $this->password = $password;
     }
@@ -47,7 +47,7 @@ class User {
 
         if ($stmt->execute()) {
             $_SESSION['user_id'] = $this->db->lastInsertId();
-            header("Location: ../index.php"); // Redirect to dashboard on successful registration
+            header("Location: ../index.php"); // Redirect to index.php on successful registration
             exit();
         } else {
             $this->error = "An error occurred while registering.";
@@ -63,7 +63,7 @@ class User {
         }
 
         // Perform database check using prepared statements
-        $query = "SELECT id, password FROM user WHERE email = :email"; // Use correct table name 'user'
+        $query = "SELECT id, password FROM user WHERE email = :email"; 
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':email', $this->email);
         $stmt->execute();

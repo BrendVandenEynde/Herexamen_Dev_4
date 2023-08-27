@@ -1,4 +1,5 @@
 <?php
+// Include necessary files and bootstrap the application
 include_once("../inc/bootstrap.php");
 
 // Create a new User instance to manage login
@@ -24,19 +25,12 @@ $usernameStmt->execute();
 $usernameResult = $usernameStmt->fetch(PDO::FETCH_ASSOC);
 $username = $usernameResult['username'];
 
-// Query for incomplete tasks
-$incompleteQuery = "SELECT * FROM lists WHERE created_by = :user_id ";
-$incompleteStmt = $db->prepare($incompleteQuery);
-$incompleteStmt->bindParam(':user_id', $userID);
-$incompleteStmt->execute();
-$incompleteTasks = $incompleteStmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Query for completed tasks
-$completedQuery = "SELECT * FROM lists WHERE created_by = :user_id";
-$completedStmt = $db->prepare($completedQuery);
-$completedStmt->bindParam(':user_id', $userID);
-$completedStmt->execute();
-$completedTasks = $completedStmt->fetchAll(PDO::FETCH_ASSOC);
+// Query to retrieve user's lists
+$userListsQuery = "SELECT * FROM lists WHERE created_by = :user_id";
+$userListsStmt = $db->prepare($userListsQuery);
+$userListsStmt->bindParam(':user_id', $userID);
+$userListsStmt->execute();
+$userLists = $userListsStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -49,44 +43,32 @@ $completedTasks = $completedStmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Home Page</title>
 </head>
 <body>
-<?php include '../inc/nav.inc.php'; ?>
+    <?php include '../inc/nav.inc.php'; ?>
 
-<div class="container">
-    <h1>Ahoy, <?= $username; ?>! Find your to-do lists down here!</h1>
+    <div class="container">
+        <h1>Ahoy, <?= $username; ?>! Find your to-do lists down here!</h1>
 
-    <!-- User's Lists Section -->
-    <?php
-    $userLists = []; // Initialize an empty array
-
-    // Query to retrieve user's lists
-    $userListsQuery = "SELECT * FROM lists WHERE created_by = :user_id";
-    $userListsStmt = $db->prepare($userListsQuery);
-    $userListsStmt->bindParam(':user_id', $userID);
-    $userListsStmt->execute();
-    $userLists = $userListsStmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    if (count($userLists) > 0) :
-    ?>
-<h2>Your Lists</h2>
-        <ul class="item-list">
-            <?php foreach ($userLists as $list) : ?>
-                <li class="item-card">
-                    <h3 class="list-name"><?= $list['name']; ?></h3>
-                    <?php if (!empty($list['description'])) : ?>
-                        <p><?= $list['description']; ?></p>
-                    <?php endif; ?>
-                    <div class="center-text">
-                        <a href="../php/listDetail.php?id=<?= $list['id']; ?>" class="item-link">
-                            <button class="view-list-button">View List</button>
-                        </a>
-                    </div>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php else : ?>
-        <p class="no-lists-message">Arrr, there be no lists here. seems like we have nothing to do.</p>
-    <?php endif; ?>
-</div>
+        <!-- User's Lists Section -->
+        <?php if (count($userLists) > 0) : ?>
+            <h2>Your Lists</h2>
+            <ul class="item-list">
+                <?php foreach ($userLists as $list) : ?>
+                    <li class="item-card">
+                        <h3 class="list-name"><?= htmlspecialchars($list['name']); ?></h3>
+                        <?php if (!empty($list['description'])) : ?>
+                            <p><?= htmlspecialchars($list['description']); ?></p>
+                        <?php endif; ?>
+                        <div class="center-text">
+                            <a href="../php/listDetail.php?id=<?= $list['id']; ?>" class="item-link">
+                                <button class="view-list-button">View List</button>
+                            </a>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else : ?>
+            <p class="no-lists-message">Arrr, there be no lists here. Seems like we have nothing to do.</p>
+        <?php endif; ?>
+    </div>
 </body>
 </html>
-

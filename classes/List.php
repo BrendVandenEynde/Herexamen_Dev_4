@@ -7,33 +7,25 @@ class ListManager {
     private $db;
 
     // Constructor: Initialize the database connection
-    public function __construct() {
-        $this->db = Db::getInstance();
+    public function __construct($db) {
+        $this->db = $db;
     }
 
     // Method to create a new list
-    public function createNewList($name, $description) {
-        // Prepare and execute the INSERT query using a prepared statement
+    public function createNewList($name, $description, $userID) {
         $query = "INSERT INTO lists (name, description, created_by) VALUES (:name, :description, :userID)";
         $stmt = $this->db->prepare($query);
 
-        // Bind parameters and execute the statement
-        $userID = $_SESSION['user_id'];
         $stmt->bindParam(':name', $name, PDO::PARAM_STR);
         $stmt->bindParam(':description', $description, PDO::PARAM_STR);
         $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
 
-        // Execute the query and return success status
-        if ($stmt->execute()) {
-            return true; // List created successfully
-        } else {
-            return false; // An error occurred while creating the list
-        }
+        return $stmt->execute(); // Return execution result
     }
 }
 
 // Create an instance of ListManager
-$listManager = new ListManager();
+$listManager = new ListManager(Db::getInstance());
 
 // Check if the request is a POST and required data is set
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['name'], $_POST['description'])) {
@@ -44,8 +36,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['name'], $_POST['descri
     $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
     $description = htmlspecialchars($description, ENT_QUOTES, 'UTF-8');
 
-    // Call the createNewList method and handle the result
-    if ($listManager->createNewList($name, $description)) {
+    $userID = $_SESSION['user_id'];
+
+    // Call the createList method and handle the result
+    if ($listManager->createNewList($name, $description, $userID)) {
         header("Location: ../php/homePage.php"); // Redirect to homePage.php on success
         exit();
     } else {
