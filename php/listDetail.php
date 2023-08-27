@@ -60,63 +60,91 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     <?php if ($list) : ?>
         <h1 id="list-detail-title">List Details: <?= $list['name']; ?></h1>
         <?php if (!empty($tasks)) : ?>
-            <!-- Display Incomplete Tasks -->
-            <div class="task-list">
-                <h2>Incomplete Tasks</h2>
-                <ul class="incomplete-task-list">
-                    <?php foreach ($tasks as $task) : ?>
-                        <?php if (!$task['completed']) : ?>
-                            <li class="task-item" id="task-item">
-                                <h3 class="task-name"><?= $task['name']; ?></h3>
-                                <p class="task-description"><?= $task['deadline']; ?></p>
-                                <div class="task-buttons center-text">
-                                    <a href="../php/taskDetail.php?id=<?= $task['id']; ?>" class="task-link">
-                                        <button class="view-task-button">View Task</button>
-                                    </a>
-                                </div>
-                            </li>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
+           <!-- Display Incomplete Tasks -->
+<div class="task-list">
+    <h2>Incomplete Tasks</h2>
+    <?php $incompleteTasks = array_filter($tasks, function($task) { return !$task['completed']; }); ?>
+    <?php
+    // Sort incomplete tasks by deadline in ascending order
+    usort($incompleteTasks, function($a, $b) {
+        return strtotime($a['deadline']) - strtotime($b['deadline']);
+    });
+    ?>
+    <ul class="incomplete-task-list">
+        <?php $counter = 0; ?>
+        <?php foreach ($incompleteTasks as $task) : ?>
+            <?php if ($counter % 5 == 0) : ?>
+                <div class="task-row">
+            <?php endif; ?>
+            <li class="task-item" id="task-item">
+                <h3 class="task-name"><?= $task['name']; ?></h3>
+                <p class="task-description"><?= $task['deadline']; ?></p>
+                <div class="task-buttons center-text">
+                    <a href="../php/taskDetail.php?id=<?= $task['id']; ?>" class="task-link">
+                        <button class="view-task-button">View Task</button>
+                    </a>
+                </div>
+            </li>
+            <?php $counter++; ?>
+            <?php if ($counter % 5 == 0 || $counter == count($incompleteTasks)) : ?>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </ul>
+</div>
 
-            <!-- Display Completed Tasks -->
-            <div class="completed-task-list">
-                <h2>Completed Tasks</h2>
-                <?php $completedTasks = array_filter($tasks, function($task) { return $task['completed']; }); ?>
-                <?php if (!empty($completedTasks)) : ?>
-                    <ul class="completed-task-ul">
-                        <?php foreach ($completedTasks as $task) : ?>
-                            <li class="task-item" id="task-item">
-                                <h3 class="task-name"><?= $task['name']; ?></h3>
-                                <p class="task-description"><?= $task['deadline']; ?></p>
-                                <div class="task-buttons">
-                                    <a href="../php/taskDetail.php?id=<?= $task['id']; ?>" class="task-link">
-                                        <button class="view-task-button">View Task</button>
-                                    </a>
-                                </div>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php else : ?>
-                    <p class="no-completed-tasks-message">We haven't found any completed tasks matey.</p>
+
+<!-- Display Completed Tasks -->
+<div class="completed-task-list">
+    <h2>Completed Tasks</h2>
+    <?php $completedTasks = array_filter($tasks, function($task) { return $task['completed']; }); ?>
+    <?php
+    // Sort completed tasks by deadline in ascending order
+    usort($completedTasks, function($a, $b) {
+        return strtotime($a['deadline']) - strtotime($b['deadline']);
+    });
+    ?>
+    <?php if (!empty($completedTasks)) : ?>
+        <div class="task-list"> <!-- Use the same class as the incomplete tasks -->
+            <?php $counter = 0; ?>
+            <?php foreach ($completedTasks as $task) : ?>
+                <?php if ($counter % 5 == 0) : ?>
+                    <div class="task-row">
                 <?php endif; ?>
-            </div>
-        <?php else : ?>
-            <p class="no-tasks-message" id="no-tasks-message">Arrr, what's this? There be no tasks on this list, it's empty! We have been taken fools mateys!</p>
-        <?php endif; ?>
+                <li class="task-item" id="task-item">
+                    <h3 class="task-name"><?= $task['name']; ?></h3>
+                    <p class="task-description"><?= $task['deadline']; ?></p>
+                    <div class="task-buttons">
+                        <a href="../php/taskDetail.php?id=<?= $task['id']; ?>" class="task-link">
+                            <button class="view-task-button">View Task</button>
+                        </a>
+                    </div>
+                </li>
+                <?php $counter++; ?>
+                <?php if ($counter % 5 == 0 || $counter == count($completedTasks)) : ?>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    <?php else : ?>
+        <p class="no-tasks-message" id="no-tasks-message">Avast ye scallywags! Why in the blazes hasn't a single thing been crossed off the list yet? Get to work!</p>
+    <?php endif; ?>
+</div>
+            <?php else : ?>
+        <p class="error-message" id="error-message">Arrr, what's this? There be no tasks on this list, it's empty! We have been taken fools mateys!</p>
+    <?php endif; ?>
 
         <!-- Display Delete List and Create Task Buttons -->
-        <div class="center-text">
+        <div class="center-buttons">
             <form method="post">
                 <button type="submit" name="delete-list" class="delete-list-button">Delete List</button>
             </form>
 
-            <!-- Create Task Button -->
             <a href="../php/createNewTask.php?list_id=<?= $listID; ?>" class="create-task-link">
                 <button class="create-task-button">Create Task</button>
             </a>
         </div>
+
     <?php else : ?>
         <p class="error-message" id="error-message">Oops! we didn't seem to get the list of ye.</p>
     <?php endif; ?>
