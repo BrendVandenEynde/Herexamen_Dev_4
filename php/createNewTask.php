@@ -11,20 +11,22 @@
 <div class="create-todo-list-container">
     <h1 class="create-todo-list-header">Create New Task</h1>
     <?php
+    // Include necessary files and classes
     include_once("../inc/bootstrap.php");
 
-    // Check if the user is authenticated and the user ID is set in the session
+    // Check if the user is authenticated and retrieve user ID from session
     if (isset($_SESSION['user_id'])) {
         $userId = $_SESSION['user_id'];
     } else {
-        // Redirect or show an error message
-        header("Location: login.php"); // Redirect to login page if user is not authenticated
+        // Redirect to login page if user is not authenticated
+        header("Location: login.php");
         exit();
     }
 
     $db = Db::getInstance();
     $taskManager = new TaskManager($db);
 
+    // Check if list_id is provided in the URL and is a valid numeric value
     if (isset($_GET['list_id']) && is_numeric($_GET['list_id'])) {
         $listId = intval($_GET['list_id']);
 
@@ -40,6 +42,7 @@
     }
     ?>
     <form method="post" action="addTask.php">
+        <!-- Pass the list ID as a hidden input field -->
         <input type="hidden" name="list" value="<?= $listId ?>">
         <label class="create-todo-list-label" for="name">Name:</label>
         <input class="create-todo-list-input" type="text" id="name" name="name" required><br><br>

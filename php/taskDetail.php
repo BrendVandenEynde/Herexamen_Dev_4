@@ -77,8 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['complete']) && !$taskC
 </div>
 
 <div class="detail-item-info">
-    <p>Description: <?= $task['description']; ?></p>
-    <p>Deadline: <?= $task['deadline']; ?></p>
+    <p>Description: <?= htmlspecialchars($task['description'], ENT_QUOTES, 'UTF-8'); ?></p>
+    <p>Deadline: <?= htmlspecialchars($task['deadline'], ENT_QUOTES, 'UTF-8'); ?></p>
 </div>
 
 <div class="buttons">

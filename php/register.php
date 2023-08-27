@@ -1,7 +1,7 @@
 <?php
 include_once("../inc/bootstrap.php");
 
-$error = '';
+$error = ''; // Initialize an error message variable
 
 $login = new User(); // Instantiate the User class
 
@@ -12,12 +12,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['logout'])) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $register = new User();
 
+    // Set user details from form inputs
     $register->setEmail($_POST['email']);
     $register->setPassword($_POST['password']);
     $register->setUsername($_POST['username']);
 
+    // Attempt user registration
     $register->register();
 
+    // Display any registration error
     if ($register->getError()) {
         $error = $register->getError();
     }
@@ -65,4 +68,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   </div>
 </body>
 </html>
-      

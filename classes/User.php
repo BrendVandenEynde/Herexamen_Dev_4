@@ -8,19 +8,19 @@ class User {
         $this->db = Db::getInstance(); // Get a database instance
     }
 
-    // Set user's email
+    // Set user's email, ensure no XSS vulnerabilities
     public function setEmail($email) {
-        $this->email = $email;
+        $this->email = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
     }
 
-    // Set user's password
+    // Set user's password, no need for XSS protection on passwords
     public function setPassword($password) {
         $this->password = $password;
     }
 
-    // Set user's username
+    // Set user's username, ensure no XSS vulnerabilities
     public function setUsername($username) {
-        $this->username = $username;
+        $this->username = htmlspecialchars($username, ENT_QUOTES, 'UTF-8');
     }
 
     // Get error message
@@ -38,7 +38,7 @@ class User {
         // Hash the password for security
         $hashedPassword = password_hash($this->password, PASSWORD_BCRYPT, ['cost' => 12]);
 
-        // Insert user data into the database
+        // Insert user data into the database using prepared statements
         $query = "INSERT INTO user (email, password, username) VALUES (:email, :password, :username)";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':email', $this->email);
@@ -62,7 +62,7 @@ class User {
             return;
         }
 
-        // Perform database check
+        // Perform database check using prepared statements
         $query = "SELECT id, password FROM user WHERE email = :email"; // Use correct table name 'user'
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':email', $this->email);
@@ -87,7 +87,7 @@ class User {
     // User logout
     public function logout() {
         session_destroy(); // Destroy the session
-        header("Location: ../Index.php"); // Corrected path
+        header("Location: ../index.php"); 
         exit();
     }
 }

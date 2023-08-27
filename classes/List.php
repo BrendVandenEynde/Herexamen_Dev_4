@@ -1,13 +1,17 @@
 <?php
+// Include necessary files and bootstrap the application
 include_once("../inc/bootstrap.php");
 
+// Define a class to manage lists
 class ListManager {
     private $db;
 
+    // Constructor: Initialize the database connection
     public function __construct() {
         $this->db = Db::getInstance();
     }
 
+    // Method to create a new list
     public function createNewList($name, $description) {
         // Prepare and execute the INSERT query using a prepared statement
         $query = "INSERT INTO lists (name, description, created_by) VALUES (:name, :description, :userID)";
@@ -19,6 +23,7 @@ class ListManager {
         $stmt->bindParam(':description', $description, PDO::PARAM_STR);
         $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
 
+        // Execute the query and return success status
         if ($stmt->execute()) {
             return true; // List created successfully
         } else {
@@ -27,12 +32,19 @@ class ListManager {
     }
 }
 
+// Create an instance of ListManager
 $listManager = new ListManager();
 
+// Check if the request is a POST and required data is set
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['name'], $_POST['description'])) {
     $name = $_POST['name'];
     $description = $_POST['description'];
 
+    // XSS protection (escape HTML entities)
+    $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+    $description = htmlspecialchars($description, ENT_QUOTES, 'UTF-8');
+
+    // Call the createNewList method and handle the result
     if ($listManager->createNewList($name, $description)) {
         header("Location: ../php/homePage.php"); // Redirect to homePage.php on success
         exit();
@@ -43,10 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['name'], $_POST['descri
 ?>
 
 <script>
+    // Add an event listener to the form submission
     document.getElementById("create-list-form").addEventListener("submit", function(event) {
         event.preventDefault();
         var form = event.target;
 
+        // Use fetch API to submit the form data
         fetch(form.action, {
             method: form.method,
             body: new FormData(form)
