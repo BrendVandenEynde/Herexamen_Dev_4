@@ -48,24 +48,31 @@ $userLists = $userListsStmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
         <h1>Ahoy, <?= $username; ?>! Find your to-do lists down here!</h1>
 
-        <!-- User's Lists Section -->
-        <?php if (count($userLists) > 0) : ?>
-            <h2>Your Lists</h2>
-            <ul class="item-list">
-                <?php foreach ($userLists as $list) : ?>
-                    <li class="item-card">
-                        <h3 class="list-name"><?= htmlspecialchars($list['name']); ?></h3>
-                        <?php if (!empty($list['description'])) : ?>
-                            <p><?= htmlspecialchars($list['description']); ?></p>
-                        <?php endif; ?>
-                        <div class="center-text">
-                            <a href="../php/listDetail.php?id=<?= $list['id']; ?>" class="item-link">
-                                <button class="view-list-button">View List</button>
-                            </a>
-                        </div>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
+      <!-- User's Lists Section -->
+      <?php if (count($userLists) > 0) : ?>
+    <h2>Your Bountiful Lists</h2>
+    <div class="lists-container">
+        <?php $counter = 0; ?>
+        <div class="lists-row">
+            <?php foreach ($userLists as $list) : ?>
+                <div class="item-card">
+                    <h3 class="list-name"><?= htmlspecialchars($list['name']); ?></h3>
+                    <?php if (!empty($list['description'])) : ?>
+                        <p><?= htmlspecialchars($list['description']); ?></p>
+                    <?php endif; ?>
+                    <div class="center-text">
+                        <a href="../php/listDetail.php?id=<?= $list['id']; ?>" class="item-link">
+                            <button class="view-list-button">View List</button>
+                        </a>
+                    </div>
+                </div>
+                <?php $counter++; ?>
+                <?php if ($counter % 5 == 0) : ?>
+                    </div><div class="lists-row">
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
         <?php else : ?>
             <p class="no-lists-message">Arrr, there be no lists here. Seems like we have nothing to do.</p>
         <?php endif; ?>

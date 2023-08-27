@@ -60,7 +60,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     <?php if ($list) : ?>
         <h1 id="list-detail-title">List Details: <?= $list['name']; ?></h1>
         <?php if (!empty($tasks)) : ?>
-           <!-- Display Incomplete Tasks -->
+       <!-- Display Incomplete Tasks -->
 <div class="task-list">
     <h2>Incomplete Tasks</h2>
     <?php $incompleteTasks = array_filter($tasks, function($task) { return !$task['completed']; }); ?>
@@ -70,27 +70,31 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         return strtotime($a['deadline']) - strtotime($b['deadline']);
     });
     ?>
-    <ul class="incomplete-task-list">
-        <?php $counter = 0; ?>
-        <?php foreach ($incompleteTasks as $task) : ?>
-            <?php if ($counter % 5 == 0) : ?>
-                <div class="task-row">
-            <?php endif; ?>
-            <li class="task-item" id="task-item">
-                <h3 class="task-name"><?= $task['name']; ?></h3>
-                <p class="task-description"><?= $task['deadline']; ?></p>
-                <div class="task-buttons center-text">
-                    <a href="../php/taskDetail.php?id=<?= $task['id']; ?>" class="task-link">
-                        <button class="view-task-button">View Task</button>
-                    </a>
-                </div>
-            </li>
-            <?php $counter++; ?>
-            <?php if ($counter % 5 == 0 || $counter == count($incompleteTasks)) : ?>
-                </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    </ul>
+    <?php if (!empty($incompleteTasks)) : ?>
+        <ul class="incomplete-task-list">
+            <?php $counter = 0; ?>
+            <?php foreach ($incompleteTasks as $task) : ?>
+                <?php if ($counter % 5 == 0) : ?>
+                    <div class="task-row">
+                <?php endif; ?>
+                <li class="task-item" id="task-item">
+                    <h3 class="task-name"><?= $task['name']; ?></h3>
+                    <p class="task-description"><?= $task['deadline']; ?></p>
+                    <div class="task-buttons center-text">
+                        <a href="../php/taskDetail.php?id=<?= $task['id']; ?>" class="task-link">
+                            <button class="view-task-button">View Task</button>
+                        </a>
+                    </div>
+                </li>
+                <?php $counter++; ?>
+                <?php if ($counter % 5 == 0 || $counter == count($incompleteTasks)) : ?>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
+    <?php else : ?>
+        <p class="no-tasks-message" id="no-tasks-message">Arrr, not a single unfinished task in sight, captain !</p>
+    <?php endif; ?>
 </div>
 
 
