@@ -3,6 +3,7 @@ class User {
     private $db;
     private $error;
     private $username;
+    private $id;
 
     public function __construct() {
         $this->db = Db::getInstance(); // Get a database instance
@@ -89,6 +90,19 @@ class User {
         session_destroy(); // Destroy the session
         header("Location: ../index.php"); 
         exit();
+    }
+
+    // Get user's username
+    public function getUsername($user_id) {
+        $db = $this->db;
+        $userID = $user_id;
+        $usernameQuery = "SELECT username FROM user WHERE id = :user_id";
+        $usernameStmt = $db->prepare($usernameQuery);
+        $usernameStmt->bindParam(':user_id', $userID);
+        $usernameStmt->execute();
+        $usernameResult = $usernameStmt->fetch(PDO::FETCH_ASSOC);
+        $username = $usernameResult['username'];
+        return $username;
     }
 }
 ?>

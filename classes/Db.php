@@ -13,9 +13,9 @@ class Db
             return self::$db;
         } else { // Create a new connections
 
-            $dsn = 'mysql:host=localhost;dbname=portpixel'; // Data Source Name
-            $username = 'root';
-            $password = '';
+            $dsn = 'mysql:host=ID392023_portpixel.db.webhosting.be;dbname=ID392023_portpixel'; // Data Source Name
+            $username = 'ID392023_portpixel';
+            $password = 'dkWX-KWt3sr!Rk7';
 
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Throw exceptions

@@ -1,6 +1,7 @@
 <?php
 // Include necessary files and bootstrap the application
 include_once("../inc/bootstrap.php");
+include_once("../classes/List.php"); // Include the ListManager class
 
 // Create a new User instance to manage login
 $login = new User();
@@ -17,20 +18,11 @@ $db = Db::getInstance();
 // Get the user's ID from the session
 $userID = $_SESSION['user_id'];
 
-// Query to retrieve the username based on the user's ID
-$usernameQuery = "SELECT username FROM user WHERE id = :user_id";
-$usernameStmt = $db->prepare($usernameQuery);
-$usernameStmt->bindParam(':user_id', $userID);
-$usernameStmt->execute();
-$usernameResult = $usernameStmt->fetch(PDO::FETCH_ASSOC);
-$username = $usernameResult['username'];
+$user = new User();
+$username = $user->getUsername($userID);
 
-// Query to retrieve user's lists
-$userListsQuery = "SELECT * FROM lists WHERE created_by = :user_id";
-$userListsStmt = $db->prepare($userListsQuery);
-$userListsStmt->bindParam(':user_id', $userID);
-$userListsStmt->execute();
-$userLists = $userListsStmt->fetchAll(PDO::FETCH_ASSOC);
+$listManager = new ListManager($db);
+$userLists = $listManager->getAllLists($userID);
 ?>
 
 <!DOCTYPE html>
@@ -61,7 +53,7 @@ $userLists = $userListsStmt->fetchAll(PDO::FETCH_ASSOC);
                         <p><?= htmlspecialchars($list['description']); ?></p>
                     <?php endif; ?>
                     <div class="center-text">
-                        <a href="../php/listDetail.php?id=<?= $list['id']; ?>" class="item-link">
+                        <a href="../php/listDetail.php?id=<?= $list['id'];?>" class="item-link">
                             <button class="view-list-button">View List</button>
                         </a>
                     </div>

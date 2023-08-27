@@ -400,6 +400,7 @@ h1,
   font-size: 32px;
   padding-top: 1%;
   padding-bottom: 1%;
+  margin-top: 50px;
 }
 
 .task-item {
@@ -414,6 +415,9 @@ h1,
   justify-content: space-between;
   height: 100%;
   width: 200px; /* Set a fixed width for the cards */
+}
+.passed-task-item{
+  border: 2px solid red;
 }
 
 #task-item:hover {

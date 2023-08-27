@@ -21,20 +21,15 @@ if ($taskID === null) {
     exit();
 }
 
+// Instantiate the TaskManager class with the database instance
+$taskManager = new TaskManager($db);
+
 // Query for the task details based on the task ID
-$taskQuery = "SELECT * FROM tasks WHERE id = :task_id"; // Use "tasks" table here
-$taskStmt = $db->prepare($taskQuery);
-$taskStmt->bindParam(':task_id', $taskID);
-$taskStmt->execute();
-$task = $taskStmt->fetch(PDO::FETCH_ASSOC);
+$task = $taskManager->getTaskById($taskID);
 
 // Handle delete task
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
-    $deleteQuery = "DELETE FROM tasks WHERE id = :task_id"; // Change "lists" to "tasks"
-    $deleteStmt = $db->prepare($deleteQuery);
-    $deleteStmt->bindParam(':task_id', $taskID);
-
-    if ($deleteStmt->execute()) {
+    if ($taskManager->deleteTask($taskID)) {
         echo "<script>alert('Task deleted successfully.'); window.location.href = 'homePage.php';</script>";
         exit();
     } else {
@@ -43,15 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
 }
 
 // Check if the task is completed
-$taskCompleted = $task['completed'] == 1;
+$taskCompleted = $taskManager->isTaskCompleted($task);
 
 // Handle complete task
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['complete']) && !$taskCompleted) {
-    $completeQuery = "UPDATE tasks SET completed = 1 WHERE id = :task_id"; // Change "lists" to "tasks"
-    $completeStmt = $db->prepare($completeQuery);
-    $completeStmt->bindParam(':task_id', $taskID);
-    
-    if ($completeStmt->execute()) {
+    if ($taskManager->completeTask($taskID)) {
         echo "<script>alert('Task completed successfully.'); window.location.href = 'homePage.php';</script>";
         exit();
     } else {
@@ -62,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['complete']) && !$taskC
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,31 +61,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['complete']) && !$taskC
     <link rel="stylesheet" href="../css/style.css">
     <title><?= $task['name']; ?> - Detailed Page</title>
 </head>
+
 <body class="detail-page">
-<?php include '../inc/nav.inc.php'; ?>
+    <?php include '../inc/nav.inc.php'; ?>
 
-<div class="detail-list-name">
-    <h1><?= $task['name']; ?></h1>
-</div>
+    <div class="detail-list-name">
+        <h1><?= $task['name']; ?></h1>
+    </div>
 
-<div class="detail-item-info">
-    <p>Description: <?= htmlspecialchars($task['description'], ENT_QUOTES, 'UTF-8'); ?></p>
-    <p>Deadline: <?= htmlspecialchars($task['deadline'], ENT_QUOTES, 'UTF-8'); ?></p>
-</div>
+    <div class="detail-item-info">
+        <p>Description: <?= htmlspecialchars($task['description'], ENT_QUOTES, 'UTF-8'); ?></p>
+        <p>Deadline: <?= htmlspecialchars($task['deadline'], ENT_QUOTES, 'UTF-8'); ?></p>
+    </div>
 
-<div class="buttons">
-    <!-- Complete Task Button -->
-    <?php if (!$taskCompleted): ?>
+    <div class="buttons">
+        <!-- Complete Task Button -->
+        <?php if (!$taskCompleted) : ?>
+            <form method="post">
+                <button type="submit" name="complete">Complete Task</button>
+            </form>
+        <?php endif; ?>
+
+        <!-- Delete Task Button -->
         <form method="post">
-            <button type="submit" name="complete">Complete Task</button>
+            <button type="submit" name="delete">Delete Task</button>
         </form>
-    <?php endif; ?>
-
-    <!-- Delete Task Button -->
-    <form method="post">
-        <button type="submit" name="delete">Delete Task</button>
-    </form>
-</div>
+    </div>
 
 </body>
+
 </html>

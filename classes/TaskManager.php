@@ -1,12 +1,15 @@
 <?php
-class TaskManager {
+class TaskManager
+{
     private $db;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
     }
 
-    public function addTask($listId, $name, $description, $deadline, $userId) {
+    public function addTask($listId, $name, $description, $deadline, $userId)
+    {
         // Sanitize user input
         $name = $this->sanitizeInput($name);
         $description = $this->sanitizeInput($description);
@@ -27,7 +30,8 @@ class TaskManager {
         return $stmt->execute();
     }
 
-    public function getListById($listId, $userId) {
+    public function getListById($listId, $userId)
+    {
         // Prepare the SELECT query using a prepared statement
         $query = "SELECT * FROM lists WHERE id = :listId AND created_by = :userId";
         $stmt = $this->db->prepare($query);
@@ -41,7 +45,8 @@ class TaskManager {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getUserLists($userId) {
+    public function getUserLists($userId)
+    {
         // Prepare the SELECT query using a prepared statement
         $query = "SELECT * FROM lists WHERE created_by = :userId";
         $stmt = $this->db->prepare($query);
@@ -55,8 +60,38 @@ class TaskManager {
     }
 
     // Sanitize user input to prevent XSS attacks
-    private function sanitizeInput($input) {
+    private function sanitizeInput($input)
+    {
         return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
     }
+
+    public function getTaskById($taskID)
+    {
+        $query = "SELECT * FROM tasks WHERE id = :task_id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':task_id', $taskID);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function deleteTask($taskID)
+    {
+        $query = "DELETE FROM tasks WHERE id = :task_id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':task_id', $taskID);
+        return $stmt->execute();
+    }
+
+    public function completeTask($taskID)
+    {
+        $query = "UPDATE tasks SET completed = 1 WHERE id = :task_id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':task_id', $taskID);
+        return $stmt->execute();
+    }
+
+    public function isTaskCompleted($task)
+    {
+        return $task['completed'] == 1;
+    }
 }
-?>
